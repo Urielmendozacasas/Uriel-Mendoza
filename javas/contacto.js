@@ -1,0 +1,49 @@
+
+const form = document.getElementById('formulario-contacto');
+const estado = document.getElementById('estado-envio');
+const btn = document.getElementById('btn-enviar');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    const datos = {
+        Email: document.getElementById('email').value,
+        Asunto: document.getElementById('asunto').value,
+        Mensaje: document.getElementById('mensaje').value
+    };
+
+    fetch("https://formsubmit.co/ajax/urielmendozacasas@gmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+        estado.textContent = "Mensaje enviado)";
+        estado.style.color = "Black";
+        estado.style.display = "block";
+        form.reset();
+
+        setTimeout(() => {
+            estado.style.display = 'none';
+        }, 4000);
+
+        btn.textContent = 'Enviar Mensaje';
+        btn.disabled = false;
+    })
+    .catch(error => {
+        estado.textContent = "Ocurrió un error al enviar el mensaje.";
+        estado.style.color = "red";
+        estado.style.display = "block";
+        btn.textContent = 'Enviar Mensaje';
+        btn.disabled = false;
+    });
+});
+
+
